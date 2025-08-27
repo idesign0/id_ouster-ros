@@ -88,9 +88,18 @@ target_link_libraries(ouster_ros_library
     ouster_build
     pcl_common
   # PRIVATE (unsupported)
-  -Wl,--whole-archive ${OUSTER_TARGET_LINKS} -Wl,--no-whole-archive
   ${OpenCV_LIBRARIES}
 )
+
+if(APPLE)
+  target_link_libraries(ouster_ros_library
+    ${OUSTER_TARGET_LINKS}
+  )
+else()
+  target_link_libraries(ouster_ros_library
+    -Wl,--whole-archive ${OUSTER_TARGET_LINKS} -Wl,--no-whole-archive
+  )
+endif()
 
 # helper method to construct ouster-ros components
 function(create_ros2_component
